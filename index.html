@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Poco a poco</title>
+  <meta name="description" content="A simple study site for Spanish 1 students: vocabulary, verbs, nouns, grammar practice, and Latin American history. Available in English and Spanish.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🇪🇸</text></svg>">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="papel-picado" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <h1 data-i18n="headerTitle">Poco a poco</h1>
+    <p class="tagline" data-i18n="headerTagline">Flashcards and quizzes for basic terms, colors, numbers, verbs, and nouns — plus grammar practice and Latin American history.</p>
+
+    <div class="lang-switch" role="group" aria-label="Language / Idioma">
+      <button type="button" class="lang-btn is-active" data-lang="en" aria-pressed="true">English</button>
+      <button type="button" class="lang-btn" data-lang="es" aria-pressed="false">Español</button>
+    </div>
+  </header>
+
+  <main>
+    <nav class="tabs" role="tablist" aria-label="Choose a section">
+      <button class="tab is-active" role="tab" id="tab-study" aria-selected="true" aria-controls="view-study" data-view="study" data-i18n="tabStudy">Study</button>
+      <button class="tab" role="tab" id="tab-practice" aria-selected="false" aria-controls="view-practice" data-view="practice" data-i18n="tabPractice">Practice</button>
+      <button class="tab" role="tab" id="tab-grammar" aria-selected="false" aria-controls="view-grammar" data-view="grammar" data-i18n="tabGrammar">Grammar</button>
+      <button class="tab" role="tab" id="tab-history" aria-selected="false" aria-controls="view-history" data-view="history" data-i18n="tabHistory">History</button>
+    </nav>
+
+    <div class="chips" id="categoryBar" role="group" aria-label="Choose a category">
+      <button class="chip is-active" data-category="terms" data-i18n="chipTerms">Basic Terms</button>
+      <button class="chip" data-category="colors" data-i18n="chipColors">Colors</button>
+      <button class="chip" data-category="numbers" data-i18n="chipNumbers">Numbers</button>
+      <button class="chip" data-category="verbs" data-i18n="chipVerbs">Verbs</button>
+      <button class="chip" data-category="nouns" data-i18n="chipNouns">Nouns</button>
+      <button class="chip" data-category="mixed" data-i18n="chipMixed">Mixed</button>
+    </div>
+
+    <!-- Study view -->
+    <section id="view-study" class="view" role="tabpanel" aria-labelledby="tab-study">
+      <p class="hint" data-i18n="studyHint">Tap the card to flip it. Use ← → to move through the deck.</p>
+
+      <div class="dir-switch" role="group" aria-label="Card starts in / La tarjeta empieza en">
+        <button type="button" class="dir-btn is-active" data-dir="es" aria-pressed="true" data-i18n="dirEs">Spanish → English</button>
+        <button type="button" class="dir-btn" data-dir="en" aria-pressed="false" data-i18n="dirEn">English → Spanish</button>
+      </div>
+
+      <button class="flashcard" id="card" aria-pressed="false">
+        <span class="card-inner">
+          <span class="card-face card-front">
+            <span class="swatch" id="frontSwatch"></span>
+            <span class="word" id="frontWord">hola</span>
+            <span class="sub" id="frontSub">tap to see English</span>
+          </span>
+          <span class="card-face card-back">
+            <span class="swatch" id="backSwatch"></span>
+            <span class="word" id="backWord">hello</span>
+            <span class="note" id="backNote"></span>
+            <span class="sub" id="backSub">en inglés</span>
+          </span>
+        </span>
+      </button>
+
+      <div class="card-controls">
+        <button class="btn" id="prevBtn" data-i18n="prevCard">← Back</button>
+        <span class="counter" id="cardCounter">1 / 1</span>
+        <button class="btn" id="nextBtn" data-i18n="nextCard">Next →</button>
+      </div>
+
+      <button class="linkish" id="shuffleBtn" data-i18n="shuffleDeck">Shuffle this deck</button>
+    </section>
+
+    <!-- Vocabulary practice view -->
+    <section id="view-practice" class="view" role="tabpanel" aria-labelledby="tab-practice" hidden>
+      <div class="quiz-top">
+        <span id="practiceProgress" class="counter">Question 1 of 10</span>
+        <span id="practiceScore" class="counter">Score: 0</span>
+      </div>
+
+      <div id="practiceBody">
+        <h2 class="quiz-question" id="practiceQuestion" data-i18n="loading">Loading…</h2>
+        <div class="options" id="practiceOptions"></div>
+        <p class="feedback" id="practiceFeedback" aria-live="polite"></p>
+        <p class="why" id="practiceWhy"></p>
+        <button class="btn btn-primary quiz-next" id="practiceNext" data-i18n="nextQuestion" hidden>Next question →</button>
+      </div>
+
+      <div id="practiceDone" class="quiz-done" hidden>
+        <p class="done-emoji">🎉</p>
+        <h2 id="practiceTitle">¡Buen trabajo!</h2>
+        <p id="practiceResult" class="done-score"></p>
+        <p id="practiceMessage" class="hint"></p>
+        <button class="btn btn-primary" id="practiceAgain" data-i18n="practiceAgain">Practice again</button>
+      </div>
+    </section>
+
+    <!-- Grammar practice view -->
+    <section id="view-grammar" class="view" role="tabpanel" aria-labelledby="tab-grammar" hidden>
+      <p class="hint" data-i18n="grammarHint">Choose the word that fits. After you answer, you'll see the rule behind it.</p>
+
+      <div class="quiz-top">
+        <span id="grammarProgress" class="counter">Question 1 of 10</span>
+        <span id="grammarScore" class="counter">Score: 0</span>
+      </div>
+
+      <div id="grammarBody">
+        <h2 class="quiz-question" id="grammarQuestion" data-i18n="loading">Loading…</h2>
+        <div class="options" id="grammarOptions"></div>
+        <p class="feedback" id="grammarFeedback" aria-live="polite"></p>
+        <p class="why" id="grammarWhy"></p>
+        <button class="btn btn-primary quiz-next" id="grammarNext" data-i18n="nextQuestion" hidden>Next question →</button>
+      </div>
+
+      <div id="grammarDone" class="quiz-done" hidden>
+        <p class="done-emoji">📚</p>
+        <h2 id="grammarTitle">¡Buen trabajo!</h2>
+        <p id="grammarResult" class="done-score"></p>
+        <p id="grammarMessage" class="hint"></p>
+        <button class="btn btn-primary" id="grammarAgain" data-i18n="practiceAgain">Practice again</button>
+      </div>
+    </section>
+
+    <!-- History view -->
+    <section id="view-history" class="view" role="tabpanel" aria-labelledby="tab-history" hidden>
+      <p class="hint" data-i18n="historyHint">The big dates and ideas from Latin American history, in order.</p>
+
+      <ol class="timeline">
+        <li class="era-card">
+          <span class="era" data-i18n="era1Label">Before 1492</span>
+          <h2 data-i18n="era1Title">Three great civilizations</h2>
+          <ul>
+            <li data-i18n-html="era1a"><strong>Maya</strong> city-states in Mesoamerica, such as Tikal, built pyramids and kept detailed calendars and writing.</li>
+            <li data-i18n-html="era1b"><strong>Aztec</strong> empire centered on Tenochtitlan, a city built on islands in a lake (founded 1325).</li>
+            <li data-i18n-html="era1c"><strong>Inca</strong> empire in the Andes, with its capital at Cusco, thousands of miles of roads, and records kept on knotted cords called <em>quipus</em>.</li>
+          </ul>
+        </li>
+
+        <li class="era-card">
+          <span class="era">1492</span>
+          <h2 data-i18n="era2Title">Columbus and the Columbian Exchange</h2>
+          <ul>
+            <li data-i18n-html="era2a">Christopher Columbus reaches the Caribbean, opening permanent contact between Europe and the Americas.</li>
+            <li data-i18n-html="era2b">The <strong>Columbian Exchange</strong> moved corn, potatoes, tomatoes, and chocolate to Europe, and horses, wheat, and sugar to the Americas.</li>
+            <li data-i18n-html="era2c">European diseases also crossed the ocean, and Indigenous populations fell sharply.</li>
+          </ul>
+        </li>
+
+        <li class="era-card">
+          <span class="era">1519–1533</span>
+          <h2 data-i18n="era3Title">The conquest</h2>
+          <ul>
+            <li data-i18n-html="era3a">Hernán Cortés defeats the Aztecs and takes Tenochtitlan in 1521; Francisco Pizarro defeats the Inca in 1533.</li>
+            <li data-i18n-html="era3b">Weapons and horses helped, but so did alliances with groups that resisted Aztec and Inca rule, and above all disease.</li>
+            <li data-i18n-html="era3c">Spain built a colonial empire ruled from Mexico City and Lima, with forced labor systems like the <em>encomienda</em>.</li>
+          </ul>
+        </li>
+
+        <li class="era-card">
+          <span class="era">1500s–1700s</span>
+          <h2 data-i18n="era4Title">Colonial life and mixing of cultures</h2>
+          <ul>
+            <li data-i18n-html="era4a">Catholic missions spread Spanish language and religion across the colonies.</li>
+            <li data-i18n-html="era4b">Indigenous, Spanish, and African peoples lived, worked, and married together, creating <em>mestizo</em> culture.</li>
+            <li data-i18n-html="era4c">This blend shaped Latin American food, music, art, and the Spanish spoken today.</li>
+          </ul>
+        </li>
+
+        <li class="era-card">
+          <span class="era">1804–1822</span>
+          <h2 data-i18n="era5Title">Independence</h2>
+          <ul>
+            <li data-i18n-html="era5a">Haiti becomes the first Latin American nation to win independence, in 1804.</li>
+            <li data-i18n-html="era5b">Mexico begins its fight in 1810 with Father Miguel Hidalgo and wins independence in 1821.</li>
+            <li data-i18n-html="era5c">Simón Bolívar and José de San Martín free much of South America in the 1810s and 1820s; Brazil separates from Portugal peacefully in 1822.</li>
+          </ul>
+        </li>
+
+        <li class="era-card">
+          <span class="era">1900s</span>
+          <h2 data-i18n="era6Title">Revolution and modern nations</h2>
+          <ul>
+            <li data-i18n-html="era6a">The Mexican Revolution starts in 1910; the Panama Canal opens in 1914.</li>
+            <li data-i18n-html="era6b">The Cuban Revolution brings Fidel Castro to power in 1959.</li>
+            <li data-i18n-html="era6c">Military dictatorships in the 1960s and 1970s gave way to elected governments in the 1980s and 1990s.</li>
+          </ul>
+        </li>
+
+        <li class="era-card">
+          <span class="era">Today</span>
+          <h2 data-i18n="era7Title">Latin America now</h2>
+          <ul>
+            <li data-i18n-html="era7a">More than 30 countries and territories make up Latin America and the Caribbean.</li>
+            <li data-i18n-html="era7b">Spanish is the official language almost everywhere except Brazil (Portuguese), Belize, Guyana, and Suriname.</li>
+            <li data-i18n-html="era7c">Writers like Gabriela Mistral, Pablo Neruda, and Gabriel García Márquez are read around the world.</li>
+          </ul>
+        </li>
+      </ol>
+
+      <div class="glossary">
+        <h2 data-i18n="glossaryTitle">Key words</h2>
+        <dl>
+          <div><dt>indígena</dt><dd data-i18n="glos1">native people of the Americas</dd></div>
+          <div><dt>colonia</dt><dd data-i18n="glos2">a territory ruled by another country</dd></div>
+          <div><dt>mestizo</dt><dd data-i18n="glos3">of mixed Indigenous and European heritage</dd></div>
+          <div><dt>independencia</dt><dd data-i18n="glos4">freedom from colonial rule</dd></div>
+          <div><dt>revolución</dt><dd data-i18n="glos5">a major, often violent, change in government</dd></div>
+          <div><dt>quipu</dt><dd data-i18n="glos6">Inca recording tool made of knotted cords</dd></div>
+        </dl>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p data-i18n="footer">¡Buena suerte! · A little practice every day goes a long way.</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
